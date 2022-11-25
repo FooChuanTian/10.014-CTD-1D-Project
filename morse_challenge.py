@@ -1,4 +1,3 @@
-import app
 import winsound
 from time import sleep
 
