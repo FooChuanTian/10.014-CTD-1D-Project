@@ -1,6 +1,6 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
-from tkinter.ttk import *
+import tkinter.ttk as ttk
 import platform
 
 if platform.system() != "Windows":
@@ -12,9 +12,9 @@ import morse_challenge
 import cipher_challenge
 
 
-class App(Tk):
-    def __init__(self):
-        super().__init__()
+class MainWindow:
+    def __init__(self, master):
+        self.master = master
 
         # Setting main window parameters
         self.__height = "700"
@@ -22,13 +22,13 @@ class App(Tk):
         self.__numRow = 2
         self.__numCol  = 3
 
-        self.title("Test")
-        self.geometry(self.__width + "x" + self.__height)
-        self.resizable(True, True)
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1)
+        self.master.title("Capture-The-Flag")
+        self.master.geometry(self.__width + "x" + self.__height)
+        self.master.resizable(True, True)
+        self.master.rowconfigure(0, weight=1)
+        self.master.columnconfigure(0, weight=1)
 
-        self.frame = Frame(self)
+        self.frame = ttk.Frame(self.master)
         self.frame.grid(row=0, column=0)
         self.frame.rowconfigure(self.__numRow, weight=1)
         self.frame.columnconfigure(self.__numCol, weight=1)
@@ -52,9 +52,9 @@ class App(Tk):
 
         # Create buttons and add them to dictionaries in btnls
         for entry in self.btnls:
-            entry.update({"btn":Button(self.frame, text=entry["name"],\
+            entry.update({"btn":ttk.Button(self.frame, text=entry["name"],\
                         command=entry["func"])})
-            entry.update({"label":Label(self.frame,\
+            entry.update({"label":ttk.Label(self.frame,\
                         text="Not solved yet...")})
 
             entry["btn"].grid(row=entry["row"], column=entry["column"],\
@@ -70,16 +70,16 @@ class App(Tk):
         self.flag_morse = "Behind"
 
         # Create window elements
-        self.morse_top = Toplevel(self)
-        self.morse_desc = Label(self.morse_top,\
+        self.morse_top = tk.Toplevel(self.frame)
+        self.morse_desc = ttk.Label(self.morse_top,\
                                 text="Decode the following morse code:")
         #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
-        self.morse_playButton = Button(self.morse_top, width=100,\
+        self.morse_playButton = ttk.Button(self.morse_top, width=100,\
                                         text="Click here for morse code",\
                                     command=lambda: morse_challenge.morse_audio(morse_challenge.str_to_morse(self.flag_morse)))
-        self.submit_btn_morse = Button(self.morse_top, text="Submit",\
+        self.submit_btn_morse = ttk.Button(self.morse_top, text="Submit",\
                                     command=lambda: self.compare_input(self.flag_morse, self.textbox_morse, 0, self.morse_top, self.submit_btn_morse))
-        self.textbox_morse = Text(self.morse_top)
+        self.textbox_morse = tk.Text(self.morse_top)
 
         # Place window elements
         self.morse_desc.grid(row=0, column=0)
@@ -89,15 +89,19 @@ class App(Tk):
     
     
     def test_win(self):
-        self.test_top = Toplevel(self)
-        self.sampleQuestion = Label(self.test_top, text="Type 'Hello World!' to solve this test question!")
-        self.submit_btn_test = Button(self.test_top, text="click here!",\
+        self.test_top = tk.Toplevel(self.frame)
+        self.sampleQuestion = ttk.Label(self.test_top, text="Type 'Hello World!' to solve this test question!")
+        self.submit_btn_test = ttk.Button(self.test_top, text="click here!",\
                                       command=lambda: self.compare_input("Hello World!", self.textbox_test, None, self.test_top, self.submit_btn_test))
-        self.textbox_test = Text(self.test_top)
+        self.textbox_test = tk.Text(self.test_top)
 
         self.sampleQuestion.grid(row=0, column=0)
         self.textbox_test.grid(row=1, column=0)
         self.submit_btn_test.grid(row=2, column=0)
+    
+    def new_window(self, win_type):
+        self.newWindow = tk.Toplevel(self.master)
+        self.app = win_type(self.newWindow)
     
     
     def compare_input(self, correct_in, textbox, index, top, submit_btn):
@@ -111,27 +115,77 @@ class App(Tk):
         # displaying whether or not they match
         message_display_row = submit_btn.grid_info()["row"]+1
         if text_input == correct_in:
-            Label(top, text="Good job!").grid(row=message_display_row, column=0)
+            ttk.Label(top, text="Good job!").grid(row=message_display_row, column=0)
             self.solved_flag(index, correct_in)
         else:
-            Label(top, text="Nope!").grid(row=message_display_row, column=0)
+            ttk.Label(top, text="Nope!").grid(row=message_display_row, column=0)
 
     
     def solved_flag(self, btn, flag):
         """If a challenge is solved, show flag in main window"""
-        self.btnls[btn]["label"] = Label(self.frame, text="Flag: {}".format(flag))
+        self.btnls[btn]["label"] = ttk.Label(self.frame, text="Flag: {}".format(flag))
         self.btnls[btn]["label"].grid(row=self.btnls[btn]["row"] + 1,\
                                     column=self.btnls[btn]["column"], sticky="news", padx=1, pady=1)
+
+
+class morse_app:
+    def __init__(self, master):
+
+        self.master = master
+        self.frame = tk.Frame(self.master)
+
+        # Setting main window parameters
+        self.__height = "700"
+        self.__width = "700"
+        self.__numRow = 2
+        self.__numCol  = 3
+
+        self.frame = ttk.Frame(self.master)
+        self.frame.rowconfigure(self.__numRow, weight=1)
+        self.frame.columnconfigure(self.__numCol, weight=1)
+
+        self.flag_morse = "Behind"
+
+        # Create window elements
+        self.morse_desc = ttk.Label(self.frame,\
+                                text="Decode the following morse code:")
+        #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
+        self.morse_playButton = ttk.Button(self.frame, width=100,\
+                                        text="Click here for morse code",\
+                                    command=lambda: morse_challenge.morse_audio(morse_challenge.str_to_morse(self.flag_morse)))
+        self.submit_btn_morse = ttk.Button(self.frame, text="Submit",\
+                                    command=lambda: self.compare_input(self.flag_morse, self.textbox_morse, 0, self, self.submit_btn_morse))
+        self.textbox_morse = tk.Text(self.frame)
+
+        # Place window elements
+        self.morse_desc.grid(row=0, column=0)
+        self.morse_playButton.grid(row=1, column=0)
+        self.textbox_morse.grid(row=2, column=0)
+        self.submit_btn_morse.grid(row=3, column=0)
+        self.frame.grid(row=0, column=0)
     
 
-def is_windows():
-    """Returns True if current system is running on Windows"""
-    return platform.system() == "Windows"
+    def compare_input(self, correct_in, textbox, index, top, submit_btn):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = textbox.get(1.0, "end-1c")
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        message_display_row = submit_btn.grid_info()["row"]+1
+        if text_input == correct_in:
+            ttk.Label(top, text="Good job!").grid(row=message_display_row, column=0)
+            self.master.solved_flag(index, correct_in)
+        else:
+            ttk.Label(top, text="Nope!").grid(row=message_display_row, column=0)
 
 
 def main():
-    app = App()
-    app.mainloop()
+    root = tk.Tk()
+    app = MainWindow(root)
+    root.mainloop()
 
 
 if __name__ == "__main__":
