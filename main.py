@@ -38,11 +38,11 @@ class App(tk.Tk):
 
         self.frames[MainWindow] = self.frame
 
-        self.frame.grid(row=0, column=0, sticky="nsew")
-
         self.show_frame(MainWindow)
 
+
     def show_frame(self, cont):
+        """shows a frame in self.frames"""
         frame = self.frames[cont]
         frame.tkraise()
 
