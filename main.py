@@ -100,13 +100,14 @@ class MorseWin(tk.Toplevel):
         # Set flag string to convert to morse code
         self.parent = parent
         self.flag = "Behind"
+        self.title("Morse Challenge")
 
         # Create window elements
         self.desc = ttk.Label(self,\
                                 text="Decode the following morse code:")
         #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
         self.play_button = ttk.Button(self, width=100,\
-                                        text="Click here for morse code",\
+                                    text="Click here for morse code",\
                                     command=lambda: morse_challenge.morse_audio(morse_challenge.str_to_morse(self.flag)))
         self.submit_btn = ttk.Button(self, text="Submit",\
                                     command=lambda: self.compare_input())
