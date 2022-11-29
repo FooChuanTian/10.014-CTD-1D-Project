@@ -207,6 +207,8 @@ class BinaryWin(tk.Toplevel):
         #label = tk.Label(self, text="Next Page")
         #label.grid(row=0,column=0)
 
+
+
         #Create window elements
         self.desc = ttk.Label(self,\
                                 text="Convert the following binary code:")
@@ -224,12 +226,10 @@ class BinaryWin(tk.Toplevel):
         self.display_button.grid(row=1, column=0)
         self.textbox.grid(row=2, column=0)
         self.submit_btn.grid(row=3, column=0)
-
        
 
-
     def display_binary_code(self):
-        self.label_1 = ttk.Label(self,text="01011001 01001111 01010101")
+        self.label_1 = ttk.Label(self,text="01011001 01101111 01110101")
         self.label_1.configure(anchor='center')
         self.label_1.grid(row =1,column=0,padx=4,pady=4,sticky="EW")
         
