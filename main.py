@@ -78,19 +78,37 @@ class MainWindow(tk.Frame):
         self.btn_dict[BinaryWin].update({"status":tk.Label(self, text="Not solved yet...")})
         self.btn_dict[BinaryWin].update({"row":1, "column":2, "complete":0})
 
+        # Final flag input
+        self.final_btn = tk.Button(self, text="Submit final string", state=tk.DISABLED)
+
         # Place window elements
         print(self.btn_dict)
         for entry in self.btn_dict:
             current_entry = self.btn_dict[entry]
             current_entry["button"].grid(row=current_entry["row"], column=current_entry["column"])
             current_entry["status"].grid(row=current_entry["row"]+1, column=current_entry["column"])
+        self.final_btn.grid(row=3, column=0)
     
     def showWindow(self, cont):
+        """opens a new window when challenge buttons are clicked on"""
         self.new = cont(self)
     
     def setStatus(self, cont, flag):
+        """sets a challenge as complete by:
+        -setting "complete" flag in self.btn_dict to 1
+        -displaying challenge flag in main page
+        """
         self.btn_dict[cont]["status"].configure(text="Flag: {}".format(str(flag)))
         self.btn_dict[cont]["complete"] = 1
+        if self.checkAllComplete() == True:
+            self.final_btn.configure(state=tk.NORMAL)
+    
+    def checkAllComplete(self):
+        """checks if all challenges are complete"""
+        for key in self.btn_dict:
+            if self.btn_dict[key]["complete"] == 0:
+                return False
+        return True
 
 
 class MorseWin(tk.Toplevel):
@@ -141,18 +159,24 @@ class CipherWin(tk.Toplevel):
 
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
+        self.parent = parent
+        self.flag = "Look"
         label = tk.Label(self, text="Next Page")
-        self.title("hello_bin")
+        self.title("hello_cipher")
         label.grid(row=0,column=0)
+        self.parent.setStatus(CipherWin, self.flag)
 
 
 class BinaryWin(tk.Toplevel):
 
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
+        self.parent = parent
+        self.flag = "You"
         label = tk.Label(self, text="Next Page")
         self.title("hello_bin")
         label.grid(row=0,column=0)
+        self.parent.setStatus(BinaryWin, self.flag)
 
 
 def main():
