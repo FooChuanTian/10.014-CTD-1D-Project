@@ -156,7 +156,7 @@ class MorseWin(tk.Toplevel):
 
 
 class CipherWin(tk.Toplevel):
-
+    """"Creates the GUI window for Challenge 2: Cipher"""
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
@@ -168,7 +168,7 @@ class CipherWin(tk.Toplevel):
 
 
 class BinaryWin(tk.Toplevel):
-
+    """Creates the GUI window for Challenge 3: Binary"""
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
@@ -177,6 +177,17 @@ class BinaryWin(tk.Toplevel):
         self.title("hello_bin")
         label.grid(row=0,column=0)
         self.parent.setStatus(BinaryWin, self.flag)
+
+
+class FinalChallenge(tk.Toplevel):
+    """Creates the GUI window to input all flags in order"""
+    def __init__(self, parent):
+        tk.Toplevel.__init__(self, parent)
+        self.parent = parent
+        self.flag = "Look Behind You"
+        label = tk.Label(self, text="Next Page")
+        self.title("hello_final")
+        label.grid(row=0,column=0)
 
 
 def main():
