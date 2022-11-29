@@ -59,7 +59,7 @@ class MainWindow(tk.Frame):
         self.columnconfigure(0, weight=0)
 
         # Initialise dict of challenge button properties
-        # The dictionary has the following structure: 
+        # The dictionary has the following structure:
         # {btn_class:{btn_object, label_object, row, column}}
         self.btn_dict = {}
 
