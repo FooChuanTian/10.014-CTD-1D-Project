@@ -203,10 +203,54 @@ class BinaryWin(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
         self.flag = "You"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_bin")
-        label.grid(row=0,column=0)
-        self.parent.setStatus(BinaryWin, self.flag)
+        self.title("Binary Challenge")
+        #label = tk.Label(self, text="Next Page")
+        #label.grid(row=0,column=0)
+
+        #Create window elements
+        self.desc = ttk.Label(self,\
+                                text="Convert the following binary code:")
+
+        self.display_button = ttk.Button(self, width=100,\
+                                    text="Click here for binary code",\
+                                    command=lambda:[self.display_button.grid_forget(),self.display_binary_code()])
+
+        self.submit_btn = ttk.Button(self, text="Submit",\
+                                    command=lambda: self.compare_input())
+        self.textbox = tk.Text(self)
+
+        # Place window elements
+        self.desc.grid(row=0, column=0)
+        self.display_button.grid(row=1, column=0)
+        self.textbox.grid(row=2, column=0)
+        self.submit_btn.grid(row=3, column=0)
+
+       
+
+
+    def display_binary_code(self):
+        self.label_1 = ttk.Label(self,text="01011001 01001111 01010101")
+        self.label_1.configure(anchor='center')
+        self.label_1.grid(row =1,column=0,padx=4,pady=4,sticky="EW")
+        
+
+    def compare_input(self):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = self.textbox.get(1.0, "end-1c")
+        # To make sure only the first letter of word input is uppercase to account for "You" being spelled in different case
+        cleaned_text = (text_input.lower()).capitalize()
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        message_display_row = self.submit_btn.grid_info()["row"]+1
+        if cleaned_text == self.flag:
+            ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
+            self.parent.setStatus(BinaryWin, self.flag)
+        else:
+            ttk.Label(self, text="Wrong!").grid(row=message_display_row, column=0) 
 
 
 class FinalChallenge(tk.Toplevel):
