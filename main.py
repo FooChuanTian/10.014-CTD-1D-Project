@@ -66,17 +66,17 @@ class MainWindow(tk.Frame):
         # Challenge 1: Morse Properties
         self.btn_dict[MorseWin] = {"button":tk.Button(self, text="Morse", command=lambda: self.showWindow(MorseWin))}
         self.btn_dict[MorseWin].update({"status":tk.Label(self, text="Not solved yet...")})
-        self.btn_dict[MorseWin].update({"row":1, "column":0})
+        self.btn_dict[MorseWin].update({"row":1, "column":0, "complete":0})
 
         # Challenge 2: Cipher Properties
         self.btn_dict[CipherWin] = {"button":tk.Button(self, text="Cipher", command=lambda: self.showWindow(CipherWin))}
         self.btn_dict[CipherWin].update({"status":tk.Label(self, text="Not solved yet...")})
-        self.btn_dict[CipherWin].update({"row":1, "column":1})
+        self.btn_dict[CipherWin].update({"row":1, "column":1, "complete":0})
 
         # Challenge 3: Binary Properties
         self.btn_dict[BinaryWin] = {"button":tk.Button(self, text="Binary", command=lambda: self.showWindow(BinaryWin))}
         self.btn_dict[BinaryWin].update({"status":tk.Label(self, text="Not solved yet...")})
-        self.btn_dict[BinaryWin].update({"row":1, "column":2})
+        self.btn_dict[BinaryWin].update({"row":1, "column":2, "complete":0})
 
         # Place window elements
         print(self.btn_dict)
@@ -90,6 +90,7 @@ class MainWindow(tk.Frame):
     
     def setStatus(self, cont, flag):
         self.btn_dict[cont]["status"].configure(text="Flag: {}".format(str(flag)))
+        self.btn_dict[cont]["complete"] = 1
 
 
 class MorseWin(tk.Toplevel):
