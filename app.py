@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import tkinter.ttk as ttk
 import platform
+import string
 
 if platform.system() != "Windows":
     messagebox.showerror("OS Error", "This program requires a Windows Operating System to run!")
@@ -44,7 +45,7 @@ class MainWindow:
 
         # Challenge 2: Cipher Properties
         self.btnls.append({"name":"Substitution Cipher", "row":1, "column":1,\
-                           "func":cipher_challenge.test})
+                           "func":self.cipher_win})
 
         # Challenge 3: Binary Properties
         self.btnls.append({"name":"Binary", "row":1, "column":2,\
@@ -62,7 +63,30 @@ class MainWindow:
             entry["label"].grid(row=entry["row"] + 1, column=entry["column"],\
                             sticky="news", padx=1, pady=1)
     
-    
+    def cipher_win(self):
+        """Creates the GUI window for Challenge 1: Morse"""
+        # Set flag string to convert to morse code
+        self.flag_cipher = "Look"
+
+        # Create window elements
+        self.cipher_top = tk.Toplevel(self.frame)
+        self.cipher_desc = ttk.Label(self.cipher_top,\
+                                text="Decode the following cipher code:")
+        #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
+        self.cipher_playButton = ttk.Button(self.cipher_top, width=100,\
+                                        text="Click here for cipher code",\
+                                    command=lambda: cipher_challenge.caesar(cipher_challenge.plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]))
+        self.submit_btn_cipher = ttk.Button(self.cipher_top, text="Submit",\
+                                    command=lambda: self.compare_input(self.flag_cipher, self.textbox_cipher, 0, self.cipher_top, self.submit_btn_cipher))
+        self.textbox_cipher = tk.Text(self.cipher_top)
+
+        # Place window elements
+        self.cipher_desc.grid(row=0, column=0)
+        self.cipher_playButton.grid(row=1, column=0)
+        self.textbox_cipher.grid(row=2, column=0)
+        self.submit_btn_cipher.grid(row=3, column=0)
+        
+
     def morse_win(self):
         """Creates the GUI window for Challenge 1: Morse"""
 
@@ -78,7 +102,7 @@ class MainWindow:
                                         text="Click here for morse code",\
                                     command=lambda: morse_challenge.morse_audio(morse_challenge.str_to_morse(self.flag_morse)))
         self.submit_btn_morse = ttk.Button(self.morse_top, text="Submit",\
-                                    command=lambda: self.compare_input(self.flag_morse, self.textbox_morse, 0, self.morse_top, self.submit_btn_morse))
+                                    command=lambda: self.compare_input(self.flag_morse, self.textbox_morse, 1, self.morse_top, self.submit_btn_morse))
         self.textbox_morse = tk.Text(self.morse_top)
 
         # Place window elements
