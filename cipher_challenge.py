@@ -1,9 +1,6 @@
 # we are importing string library
 import string
-import tkinter
-top = tkinter.Tk()
 #Code to add widgets will go here
-top.mainloop()
 
 plain_text="Look"
 # this is a function for the caesar 

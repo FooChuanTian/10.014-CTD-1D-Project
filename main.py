@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import tkinter.ttk as ttk
 import platform
+import string
 
 if platform.system() != "Windows":
     messagebox.showerror("OS Error", "This program requires a Windows Operating System to run!")
@@ -160,11 +161,40 @@ class CipherWin(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
-        self.flag = "Look"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_cipher")
-        label.grid(row=0,column=0)
-        self.parent.setStatus(CipherWin, self.flag)
+        self.flag_cipher = "Look"
+
+        # Create window elements
+        self.cipher_desc = ttk.Label(self,\
+                                text="Decode the following cipher code:")
+        #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
+        self.cipher_playButton = ttk.Button(self, width=100,\
+                                        text="Click here for cipher code",\
+                                    command=lambda: cipher_challenge.caesar(cipher_challenge.plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]))
+        self.submit_btn_cipher = ttk.Button(self, text="Submit",\
+                                    command=lambda: self.compare_input())
+        self.textbox_cipher = tk.Text(self)
+
+        # Place window elements
+        self.cipher_desc.grid(row=0, column=0)
+        self.cipher_playButton.grid(row=1, column=0)
+        self.textbox_cipher.grid(row=2, column=0)
+        self.submit_btn_cipher.grid(row=3, column=0)
+
+    def compare_input(self):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = self.textbox_cipher.get(1.0, "end-1c")
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        message_display_row = self.submit_btn_cipher.grid_info()["row"]+1
+        if text_input == self.flag_cipher:
+            ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
+            self.parent.setStatus(CipherWin, self.flag_cipher)
+        else:
+            ttk.Label(self, text="Wrong!").grid(row=message_display_row, column=0)
 
 
 class BinaryWin(tk.Toplevel):
