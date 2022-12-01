@@ -79,7 +79,7 @@ class MainWindow(tk.Frame):
         self.btn_dict[BinaryWin].update({"row":1, "column":2, "complete":0})
 
         # Final flag input
-        self.final_btn = tk.Button(self, text="Submit final string", state=tk.DISABLED)
+        self.final_btn = tk.Button(self, text="Submit final string", state=tk.DISABLED, command=lambda: self.showWindow(FinalChallenge))
 
         # Place window elements
         print(self.btn_dict)
@@ -118,7 +118,7 @@ class MorseWin(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         # Set flag string to convert to morse code
         self.parent = parent
-        self.flag = "Behind"
+        self.flag = "behind"
         self.title("Morse Challenge")
 
         # Create window elements
@@ -148,7 +148,7 @@ class MorseWin(tk.Toplevel):
         # Comparing user-input and correct strings and 
         # displaying whether or not they match
         message_display_row = self.submit_btn.grid_info()["row"]+1
-        if text_input == self.flag:
+        if text_input.lower() == self.flag:
             ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
             self.parent.setStatus(MorseWin, self.flag)
         else:
@@ -184,10 +184,39 @@ class FinalChallenge(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
+        self.title("One last thing...")
         self.flag = "Look Behind You"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_final")
-        label.grid(row=0,column=0)
+        self.desc = tk.Label(self, text="Congratulations on completing all challenges! However, one final puzzle awaits...")
+        self.desc.grid(row=0, column=0)
+
+        self.btn_dict = {}
+        self.switch_ls = []
+        
+        self.cls_ls = list(self.parent.btn_dict.keys())
+
+        k=0
+        for key in self.parent.btn_dict:
+            current_entry = self.parent.btn_dict[key]
+            current_flag = current_entry["status"].cget("text").replace("Flag: ", "")
+            self.btn_dict[key] = tk.Button(self, text=current_flag)
+            self.btn_dict[key].grid(row=1, column=k)
+            k += 1
+        
+        self.btn_dict[MorseWin].configure(command=lambda: self.switch_btn(MorseWin))
+        self.btn_dict[BinaryWin].configure(command=lambda: self.switch_btn(BinaryWin))
+        self.btn_dict[CipherWin].configure(command=lambda: self.switch_btn(CipherWin))
+            
+
+    
+    def switch_btn(self, btn_key):
+        self.switch_ls.append(btn_key)
+        if len(self.switch_ls) == 2:
+            column_1 = self.btn_dict[self.switch_ls[0]].grid_info()["column"]
+            column_2 = self.btn_dict[self.switch_ls[1]].grid_info()["column"]
+            column_1, column_2 = column_2, column_1
+            self.btn_dict[self.switch_ls[0]].grid(row=self.btn_dict[self.switch_ls[0]].grid_info()["row"], column=self.btn_dict[self.switch_ls[0]].grid_info()["column"])
+            self.btn_dict[self.switch_ls[1]].grid(row=self.btn_dict[self.switch_ls[1]].grid_info()["row"], column=self.btn_dict[self.switch_ls[1]].grid_info()["column"])
+        
 
 
 def main():
