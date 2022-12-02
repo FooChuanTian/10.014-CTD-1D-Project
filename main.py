@@ -87,7 +87,7 @@ class MainWindow(tk.Frame):
             current_entry = self.btn_dict[entry]
             current_entry["button"].grid(row=current_entry["row"], column=current_entry["column"])
             current_entry["status"].grid(row=current_entry["row"]+1, column=current_entry["column"])
-        self.final_btn.grid(row=3, column=0)
+        self.final_btn.grid(row=3, column=0, columnspan=len(self.btn_dict))
     
     def showWindow(self, cont):
         """opens a new window when challenge buttons are clicked on"""
@@ -118,7 +118,7 @@ class MorseWin(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         # Set flag string to convert to morse code
         self.parent = parent
-        self.flag = "behind"
+        self.flag = "Behind"
         self.title("Morse Challenge")
 
         # Create window elements
@@ -148,7 +148,7 @@ class MorseWin(tk.Toplevel):
         # Comparing user-input and correct strings and 
         # displaying whether or not they match
         message_display_row = self.submit_btn.grid_info()["row"]+1
-        if text_input.lower() == self.flag:
+        if text_input.lower() == self.flag.lower():
             ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
             self.parent.setStatus(MorseWin, self.flag)
         else:
@@ -191,6 +191,7 @@ class FinalChallenge(tk.Toplevel):
 
         self.btn_dict = {}
         self.switch_ls = []
+        self.current_order = []
         
         self.cls_ls = list(self.parent.btn_dict.keys())
 
@@ -219,9 +220,21 @@ class FinalChallenge(tk.Toplevel):
             self.switch_ls = []
 
     def verify(self):
-        pass
+        in_order_dict = {}
+        for key in self.btn_dict:
+            in_order_dict.update({self.btn_dict[key].grid_info()["column"]: self.btn_dict[key].cget("text")})
         
-
+        compare_string_ls = []
+        for i in range(len(in_order_dict)):
+            compare_string_ls.append(in_order_dict[i])
+        
+        message_display_row = self.submit_button.grid_info()["row"] + 1
+        
+        if " ".join(compare_string_ls) == self.flag:
+            ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0, columnspan=len(self.btn_dict))
+        else:
+            ttk.Label(self, text="Wrong!").grid(row=message_display_row, column=0, columnspan=len(self.btn_dict))
+        
 
 def main():
     app = App()
