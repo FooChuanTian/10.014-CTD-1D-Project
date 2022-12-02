@@ -186,8 +186,8 @@ class FinalChallenge(tk.Toplevel):
         self.parent = parent
         self.title("One last thing...")
         self.flag = "Look Behind You"
-        self.desc = tk.Label(self, text="Congratulations on completing all challenges! However, one final puzzle awaits...")
-        self.desc.grid(row=0, column=0)
+        self.desc = tk.Label(self, text="Congratulations on completing all challenges! However, one final puzzle awaits...\nRearrange the flags in the right order")
+        self.desc.grid(row=0, column=0, columnspan=3)
 
         self.btn_dict = {}
         self.switch_ls = []
@@ -205,17 +205,21 @@ class FinalChallenge(tk.Toplevel):
         self.btn_dict[MorseWin].configure(command=lambda: self.switch_btn(MorseWin))
         self.btn_dict[BinaryWin].configure(command=lambda: self.switch_btn(BinaryWin))
         self.btn_dict[CipherWin].configure(command=lambda: self.switch_btn(CipherWin))
-            
 
+        self.submit_button = tk.Button(self, text="Submit", command=self.verify)
+        self.submit_button.grid(row=2, column=0, columnspan=3)
     
     def switch_btn(self, btn_key):
-        self.switch_ls.append(btn_key)
+        self.switch_ls.append(self.btn_dict[btn_key])
         if len(self.switch_ls) == 2:
-            column_1 = self.btn_dict[self.switch_ls[0]].grid_info()["column"]
-            column_2 = self.btn_dict[self.switch_ls[1]].grid_info()["column"]
-            column_1, column_2 = column_2, column_1
-            self.btn_dict[self.switch_ls[0]].grid(row=self.btn_dict[self.switch_ls[0]].grid_info()["row"], column=self.btn_dict[self.switch_ls[0]].grid_info()["column"])
-            self.btn_dict[self.switch_ls[1]].grid(row=self.btn_dict[self.switch_ls[1]].grid_info()["row"], column=self.btn_dict[self.switch_ls[1]].grid_info()["column"])
+            coord_1 = self.switch_ls[0].grid_info()
+            coord_2 = self.switch_ls[1].grid_info()
+            self.switch_ls[0].grid(row=coord_2["row"], column=coord_2["column"])
+            self.switch_ls[1].grid(row=coord_1["row"], column=coord_1["column"])
+            self.switch_ls = []
+
+    def verify(self):
+        pass
         
 
 
