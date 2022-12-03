@@ -255,7 +255,8 @@ class BinaryWin(tk.Toplevel):
 
         self.ascii_table_Desc = tk.Label(self.frame_3, text='Ascii Table')
 
-        self.photo = tk.PhotoImage(file='binary_table.png')
+        self.photo_path = "resources/binary_table.png"
+        self.photo = tk.PhotoImage(file=self.photo_path)
         self.ascii_Table = tk.Label(self.frame_3,image=self.photo)
         
 
