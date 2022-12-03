@@ -191,10 +191,80 @@ class BinaryWin(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
         self.flag = "You"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_bin")
-        label.grid(row=0,column=0)
-        self.parent.setStatus(BinaryWin, self.flag)
+        self.title("Binary Challenge")
+
+        s = ttk.Style()
+        s.configure('colour.TFrame', background ="red")
+        s.configure('colour_1.TFrame', background ="blue")
+
+        #Create Frames
+        self.frame_1 = ttk.Frame(self)
+        self.frame_2 = ttk.Frame(self)
+        self.frame_3 = ttk.Frame(self)
+        self.frame_4 = ttk.Frame(self)
+
+        #Place frames in window
+        self.frame_1.grid(row=0, columnspan=2,padx=10, pady = 10)
+        self.frame_2.grid(row=1, columnspan=2,padx= 10,pady =10)
+        self.frame_3.grid(rowspan=3, column=0)
+        self.frame_4.grid(row=2, column=1)
+
+
+        #Create window elements
+        self.desc = ttk.Label(self.frame_1,\
+                    text="Convert The Following Binary Code:")
+        self.desc.configure(font=('Comic Sans', 20))
+
+        self.display_button = ttk.Button(self.frame_2, width=200,\
+                        text="Click here to display binary code",\
+                        command=lambda:[self.display_button.grid_forget(),self.display_binary_code()])
+
+        self.ascii_table_Desc = tk.Label(self.frame_3, text='Ascii Table')
+        self.photo_path = 'resources/binary_table.png'
+        self.photo = tk.PhotoImage(file=self.photo_path)
+        self.ascii_Table = tk.Label(self.frame_3,image=self.photo)
+        
+
+        self.textbox_Desc = tk.Label(self.frame_4, text='Enter your answer here:')
+        self.textbox = tk.Text(self.frame_4)
+       
+        self.submit_btn = ttk.Button(self.frame_4, text="Submit",\
+                        command=lambda: self.compare_input())
+
+        # Place window elements in frames
+        self.desc.grid(column = 0,columnspan=3, row= 0)
+        self.display_button.grid(column =0, columnspan=3, row = 1)
+        self.ascii_table_Desc.pack(side='top')
+        self.ascii_Table.pack()
+        self.textbox_Desc.grid(row=0)
+        self.textbox.grid(row=1)
+        self.submit_btn.grid(row=2)
+        
+
+    def display_binary_code(self):
+        self.label_1 = ttk.Label(self,text="01011001 01101111 01110101")
+        self.label_1.configure(anchor='center',font=('Comic Sans',20))
+        self.label_1.grid(row =1,columnspan=2,padx=10,pady=10,sticky="EW")
+        
+
+    def compare_input(self):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = self.textbox.get(1.0, "end-1c")
+        # To make sure only the first letter of word input is uppercase to account for "You" being spelled in different case
+        cleaned_text = (text_input.lower()).capitalize()
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        if cleaned_text == self.flag:
+            ttk.Label(self.frame_4, text="Good job!").grid(row=3)
+            
+
+            self.parent.setStatus(BinaryWin, self.flag)
+        else:
+            ttk.Label(self.frame_4, text="Wrong!").grid(row=3)
 
 
 class FinalChallenge(tk.Toplevel):
