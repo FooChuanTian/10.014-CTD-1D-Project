@@ -3,6 +3,8 @@ import string
 #Code to add widgets will go here
 
 plain_text="Look"
+shift=8
+alpha=[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]
 # this is a function for the caesar 
 def caesar(text,shift,alphabets):
     def shift_alphabet(alphabets):
@@ -15,7 +17,7 @@ def caesar(text,shift,alphabets):
     return text.translate(table)
 
 def test():
-    assert caesar(plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]) == "Twws"
+    assert caesar(plain_text,shift,alpha) == "Twws"
 
 
 def main():
@@ -28,4 +30,4 @@ if __name__ == "__main__":
 
 
 
-print(caesar(plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]))
+print(caesar(plain_text,shift,alpha))
