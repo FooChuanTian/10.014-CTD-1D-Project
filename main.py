@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import tkinter.ttk as ttk
 import platform
+import string
 
 if platform.system() != "Windows":
     messagebox.showerror("OS Error",\
@@ -113,6 +114,7 @@ class MainWindow(tk.Frame):
         """
         self.btn_dict[cont]["status"].configure(text="Flag: {}"\
                                             .format(str(flag)))
+
         self.btn_dict[cont]["complete"] = 1
         if self.checkAllComplete() == True:
             self.final_btn.configure(state=tk.NORMAL)
@@ -140,9 +142,11 @@ class MorseWin(tk.Toplevel):
                                 text="Decode the following morse code:")
         self.play_button = ttk.Button(self, width=100,\
                                     text="Click here for morse code",\
+
                                     command=lambda: morse_challenge.\
                                         morse_audio(morse_challenge.\
                                                     str_to_morse(self.flag)))
+
         self.submit_btn = ttk.Button(self, text="Submit",\
                                     command=lambda: self.compare_input())
         self.textbox = tk.Text(self)
@@ -164,6 +168,7 @@ class MorseWin(tk.Toplevel):
         # Comparing user-input and correct strings and 
         # displaying whether or not they match
         message_display_row = self.submit_btn.grid_info()["row"]+1
+
         if text_input.lower() == self.flag.lower():
             ttk.Label(self, text="Good job!").grid(row=message_display_row,\
                                                     column=0)
@@ -178,11 +183,40 @@ class CipherWin(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
-        self.flag = "Look"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_cipher")
-        label.grid(row=0,column=0)
-        self.parent.setStatus(CipherWin, self.flag)
+        self.flag_cipher = "Look"
+
+        # Create window elements
+        self.cipher_desc = ttk.Label(self,\
+                                text="Decode the following cipher code:")
+        #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
+        self.cipher_playButton = ttk.Button(self, width=100,\
+                                        text="Click here for cipher code",\
+                                    command=lambda: cipher_challenge.caesar(cipher_challenge.plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]))
+        self.submit_btn_cipher = ttk.Button(self, text="Submit",\
+                                    command=lambda: self.compare_input())
+        self.textbox_cipher = tk.Text(self)
+
+        # Place window elements
+        self.cipher_desc.grid(row=0, column=0)
+        self.cipher_playButton.grid(row=1, column=0)
+        self.textbox_cipher.grid(row=2, column=0)
+        self.submit_btn_cipher.grid(row=3, column=0)
+
+    def compare_input(self):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = self.textbox_cipher.get(1.0, "end-1c")
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        message_display_row = self.submit_btn_cipher.grid_info()["row"]+1
+        if text_input == self.flag_cipher:
+            ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
+            self.parent.setStatus(CipherWin, self.flag_cipher)
+        else:
+            ttk.Label(self, text="Wrong!").grid(row=message_display_row, column=0)
 
 
 class BinaryWin(tk.Toplevel):
@@ -191,10 +225,80 @@ class BinaryWin(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
         self.flag = "You"
-        label = tk.Label(self, text="Next Page")
-        self.title("hello_bin")
-        label.grid(row=0,column=0)
-        self.parent.setStatus(BinaryWin, self.flag)
+        self.title("Binary Challenge")
+
+        s = ttk.Style()
+        s.configure('colour.TFrame', background ="red")
+        s.configure('colour_1.TFrame', background ="blue")
+
+        #Create Frames
+        self.frame_1 = ttk.Frame(self)
+        self.frame_2 = ttk.Frame(self)
+        self.frame_3 = ttk.Frame(self)
+        self.frame_4 = ttk.Frame(self)
+
+        #Place frames in window
+        self.frame_1.grid(row=0, columnspan=2,padx=10, pady = 10)
+        self.frame_2.grid(row=1, columnspan=2,padx= 10,pady =10)
+        self.frame_3.grid(rowspan=3, column=0)
+        self.frame_4.grid(row=2, column=1)
+
+
+        #Create window elements
+        self.desc = ttk.Label(self.frame_1,\
+                    text="Convert The Following Binary Code:")
+        self.desc.configure(font=('Comic Sans', 20))
+
+        self.display_button = ttk.Button(self.frame_2, width=200,\
+                        text="Click here to display binary code",\
+                        command=lambda:[self.display_button.grid_forget(),self.display_binary_code()])
+
+        self.ascii_table_Desc = tk.Label(self.frame_3, text='Ascii Table')
+
+        self.photo = tk.PhotoImage(file='binary_table.png')
+        self.ascii_Table = tk.Label(self.frame_3,image=self.photo)
+        
+
+        self.textbox_Desc = tk.Label(self.frame_4, text='Enter your answer here:')
+        self.textbox = tk.Text(self.frame_4)
+       
+        self.submit_btn = ttk.Button(self.frame_4, text="Submit",\
+                        command=lambda: self.compare_input())
+
+        # Place window elements in frames
+        self.desc.grid(column = 0,columnspan=3, row= 0)
+        self.display_button.grid(column =0, columnspan=3, row = 1)
+        self.ascii_table_Desc.pack(side='top')
+        self.ascii_Table.pack()
+        self.textbox_Desc.grid(row=0)
+        self.textbox.grid(row=1)
+        self.submit_btn.grid(row=2)
+        
+
+    def display_binary_code(self):
+        self.label_1 = ttk.Label(self,text="01011001 01101111 01110101")
+        self.label_1.configure(anchor='center',font=('Comic Sans',20))
+        self.label_1.grid(row =1,columnspan=2,padx=10,pady=10,sticky="EW")
+        
+
+    def compare_input(self):
+        """Compares input in textbox with the correct input
+        Displays whether the input was correct or not in the window itself
+        """
+        # Get string input from textbox
+        text_input = self.textbox.get(1.0, "end-1c")
+        # To make sure only the first letter of word input is uppercase to account for "You" being spelled in different case
+        cleaned_text = (text_input.lower()).capitalize()
+
+        # Comparing user-input and correct strings and 
+        # displaying whether or not they match
+        if cleaned_text == self.flag:
+            ttk.Label(self.frame_4, text="Good job!").grid(row=3)
+            
+
+            self.parent.setStatus(BinaryWin, self.flag)
+        else:
+            ttk.Label(self.frame_4, text="Wrong!").grid(row=3)
 
 
 class FinalChallenge(tk.Toplevel):
@@ -267,7 +371,7 @@ class FinalChallenge(tk.Toplevel):
         else:
             ttk.Label(self, text="Wrong!").grid(row=message_display_row,\
                     column=0, columnspan=len(self.btn_dict))
-        
+       
 
 def main():
     app = App()
