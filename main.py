@@ -218,8 +218,8 @@ class BinaryWin(tk.Toplevel):
         #Place frames in window
         self.frame_1.grid(row=0, columnspan=2,padx=10, pady = 10)
         self.frame_2.grid(row=1, columnspan=2,padx= 10,pady =10)
-        self.frame_3.grid(rowspan=4, column=0)
-        self.frame_4.grid(row=2 , column=1)
+        self.frame_3.grid(rowspan=3, column=0)
+        self.frame_4.grid(row=2, column=1)
 
 
         #Create window elements
@@ -229,7 +229,6 @@ class BinaryWin(tk.Toplevel):
 
         self.display_button = ttk.Button(self.frame_2, width=200,\
                         text="Click here to display binary code",\
-        
                         command=lambda:[self.display_button.grid_forget(),self.display_binary_code()])
 
         self.ascii_table_Desc = tk.Label(self.frame_3, text='Ascii Table')
@@ -242,9 +241,9 @@ class BinaryWin(tk.Toplevel):
         self.textbox = tk.Text(self.frame_4)
        
         self.submit_btn = ttk.Button(self.frame_4, text="Submit",\
-                        command=lambda:[self.display_button.grid_forget(),self.compare_input()])
+                        command=lambda: self.compare_input())
 
-        # Place window elements
+        # Place window elements in frames
         self.desc.grid(column = 0,columnspan=3, row= 0)
         self.display_button.grid(column =0, columnspan=3, row = 1)
         self.ascii_table_Desc.pack(side='top')
@@ -273,6 +272,8 @@ class BinaryWin(tk.Toplevel):
         # displaying whether or not they match
         if cleaned_text == self.flag:
             ttk.Label(self.frame_4, text="Good job!").grid(row=3)
+            
+
             self.parent.setStatus(BinaryWin, self.flag)
         else:
             ttk.Label(self.frame_4, text="Wrong!").grid(row=3)
