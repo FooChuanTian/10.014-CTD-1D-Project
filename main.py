@@ -183,24 +183,32 @@ class CipherWin(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
-        self.flag_cipher = "Look"
+        self.flag_cipher = cipher_challenge.plain_text
+        self.title("Cipher Challenge")
 
         # Create window elements
         self.cipher_desc = ttk.Label(self,\
                                 text="Decode the following cipher code:")
         #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
-        self.cipher_playButton = ttk.Button(self, width=100,\
+        self.cipher_button = ttk.Button(self, width=100,\
                                         text="Click here for cipher code",\
-                                    command=lambda: cipher_challenge.caesar(cipher_challenge.plain_text,8,[string.ascii_lowercase,string.ascii_uppercase,string.punctuation]))
+                                        command=lambda: [self.cipher_button.grid_forget(),self.display_cipher_code()])
+                                     
         self.submit_btn_cipher = ttk.Button(self, text="Submit",\
                                     command=lambda: self.compare_input())
         self.textbox_cipher = tk.Text(self)
 
         # Place window elements
         self.cipher_desc.grid(row=0, column=0)
-        self.cipher_playButton.grid(row=1, column=0)
+        self.cipher_button.grid(row=1, column=0)
         self.textbox_cipher.grid(row=2, column=0)
         self.submit_btn_cipher.grid(row=3, column=0)
+
+    def display_cipher_code(self):
+        self.label_1 = ttk.Label(self,text=cipher_challenge.caesar(cipher_challenge.plain_text,cipher_challenge.shift,\
+                                 cipher_challenge.alpha))
+        self.label_1.configure(anchor='center')
+        self.label_1.grid(row =1,column=0,padx=4,pady=4,sticky="EW")
 
     def compare_input(self):
         """Compares input in textbox with the correct input
@@ -255,8 +263,9 @@ class BinaryWin(tk.Toplevel):
 
         self.ascii_table_Desc = tk.Label(self.frame_3, text='Ascii Table')
 
-        self.photo_path = "resources/binary_table.png"
-        self.photo = tk.PhotoImage(file=self.photo_path)
+        self.phto_path = 'resources/binary_table.png'
+        self.photo = tk.PhotoImage(file=self.phto_path)
+
         self.ascii_Table = tk.Label(self.frame_3,image=self.photo)
         
 
