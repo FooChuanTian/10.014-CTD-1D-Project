@@ -22,18 +22,17 @@ def check_str(str):
     if str_to_binary(str) == "01111001 01101111 01110101":
         return "You got it"
     else:
-        print(str_to_binary(str))
         return "Wrong"
 
-print(str_to_binary(text))
+
+def test():
+    assert str_to_binary("SOS") == "01010011 01001111 01010011"
+    assert str_to_binary("hello") == "01101000 01100101 01101100 01101100 01101111"
 
 
 def main():
-    pass
+    test()
 
-def test():
-    print("yes_bin")
-    return True
 
 if __name__ == "__main__":
     main()

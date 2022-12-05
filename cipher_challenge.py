@@ -25,9 +25,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-print(caesar(plain_text,shift,alpha))
