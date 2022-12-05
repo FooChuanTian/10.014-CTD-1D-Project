@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, Image
 import tkinter.ttk as ttk
 import platform
 import string
@@ -22,8 +22,8 @@ class App(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         # Setting main window parameters
-        self.__height = "700"
-        self.__width = "700"
+        self.__height = "200"
+        self.__width = "500"
 
         self.title("Capture-The-Flag")
         self.geometry(self.__width + "x" + self.__height)
@@ -66,23 +66,26 @@ class MainWindow(tk.Frame):
 
         # Challenge 1: Morse Properties
         self.btn_dict[MorseWin] = {"button":tk.Button(self, text="Morse",\
+                                padx=10, pady=10, 
                                 command=lambda: self.showWindow(MorseWin))}
-        self.btn_dict[MorseWin].update({"status":tk.Label(self, \
-                                        text="Not solved yet...")})
+        self.btn_dict[MorseWin].update({"status":tk.Label(self, padx=10, \
+                                        pady=10, text="Not solved yet...")})
         self.btn_dict[MorseWin].update({"row":1, "column":0, "complete":0})
 
         # Challenge 2: Cipher Properties
         self.btn_dict[CipherWin] = {"button":tk.Button(self, text="Cipher",\
+                                padx=10, pady=10, \
                                 command=lambda: self.showWindow(CipherWin))}
-        self.btn_dict[CipherWin].update({"status":tk.Label(self,\
-                                        text="Not solved yet...")})
+        self.btn_dict[CipherWin].update({"status":tk.Label(self, padx=10,\
+                                        pady=10, text="Not solved yet...")})
         self.btn_dict[CipherWin].update({"row":1, "column":1, "complete":0})
 
         # Challenge 3: Binary Properties
-        self.btn_dict[BinaryWin] = {"button":tk.Button(self, text="Binary", \
+        self.btn_dict[BinaryWin] = {"button":tk.Button(self, text="Binary",\
+                                padx=10, pady=10,\
                                 command=lambda: self.showWindow(BinaryWin))}
-        self.btn_dict[BinaryWin].update({"status":tk.Label(self,\
-                                        text="Not solved yet...")})
+        self.btn_dict[BinaryWin].update({"status":tk.Label(self,padx=10,\
+                                        pady=10, text="Not solved yet...")})
         self.btn_dict[BinaryWin].update({"row":1, "column":2,\
                                         "complete":0})
 
@@ -93,7 +96,6 @@ class MainWindow(tk.Frame):
                                     self.showWindow(FinalChallenge))
 
         # Place window elements
-        print(self.btn_dict)
         for entry in self.btn_dict:
             current_entry = self.btn_dict[entry]
             current_entry["button"].grid(row=current_entry["row"],\
@@ -132,6 +134,7 @@ class MorseWin(tk.Toplevel):
         """Creates the GUI window for Challenge 1: Morse"""
         tk.Toplevel.__init__(self, parent)
         # Set flag string to convert to morse code
+        self.__WIDTH = 50
         self.parent = parent
         self.flag = "Behind"
         self.title("Morse Challenge")
@@ -139,12 +142,15 @@ class MorseWin(tk.Toplevel):
         # Create window elements
         self.desc = ttk.Label(self,\
                                 text="Decode the following morse code:")
-        self.play_button = ttk.Button(self, width=100,\
+        self.play_button = ttk.Button(self, width=self.__WIDTH,\
                                     text="Click here for morse code",\
 
                                     command=lambda: morse_challenge.\
                                         morse_audio(morse_challenge.\
                                                     str_to_morse(self.flag)))
+        self.hint_button = ttk.Button(self, width=self.__WIDTH,\
+                                    text="Morse Code Reference",\
+                                    command=self.show_hint)
 
         self.submit_btn = ttk.Button(self, text="Submit",\
                                     command=lambda: self.compare_input())
@@ -153,10 +159,20 @@ class MorseWin(tk.Toplevel):
         # Place window elements
         self.desc.grid(row=0, column=0)
         self.play_button.grid(row=1, column=0)
-        self.textbox.grid(row=2, column=0)
-        self.submit_btn.grid(row=3, column=0)
+        self.hint_button.grid(row=2, column=0)
+        self.textbox.grid(row=3, column=0)
+        self.submit_btn.grid(row=4, column=0)
     
+    def show_hint(self):
+        """opens a window with a morse code reference sheet"""
+        self.image_path = "resources/morse_hint.png"
+        self.image_obj = tk.PhotoImage(file="resources/morse_hint.png")
 
+        self.hint_win = tk.Toplevel(self)
+        self.hint_win.title("Morse Code Reference")
+        tk.Label(self.hint_win, image=self.image_obj).pack()
+
+    
     def compare_input(self):
         """Compares input in textbox with the correct input
         Displays whether the input was correct or not in the window itself
@@ -382,7 +398,7 @@ class FinalChallenge(tk.Toplevel):
                     column=0, columnspan=len(self.btn_dict))
     
     def quit_dialog(self):
-        """Allows a player to exit the game"""
+        """Final screen of the game before it quits automatically"""
         self.quit_top = tk.Toplevel(self.parent)
         current_user = os.getlogin()
         tk.Label(self.quit_top, text="LOOK BEHIND YOU").grid(row=0, column=0)
@@ -392,24 +408,15 @@ class FinalChallenge(tk.Toplevel):
         tk.Label(self.quit_top, text="{}".format(current_user), font=("Impact", 30)).grid(row=1, column=0)
         self.parent.parent.update()
         sleep(1)
-        #ttl = 5
-        #for i in range(ttl):
-            #tk.Label(self.quit_top, text="Have fun sleeping tonight :)\n This program exits in {} seconds".format(ttl-i)).grid(row=2, column=0)
-            #sleep(1)
-        #self.parent.parent.destroy()
-
-
-        message = "Congratulations on completing the game!\nYou may now quit."
-
-        #self.quit_win = tk.Toplevel(self.parent)
-        #self.quit_button = tk.Button(self.quit_win, text="Quit", command=self.parent.parent.destroy)
-        #self._quit_label = tk.Label(self.quit_win, text=message)
-
-        #self._quit_label.grid(row=0, column=0)
-        #self.quit_button.grid(row=1, column=0)
+        ttl = 5
+        for i in range(ttl):
+            tk.Label(self.quit_top, text="Have fun sleeping tonight :)\
+                    \nThis program exits in {} seconds".format(ttl-i)).grid(row=2, column=0)
+            self.parent.parent.update()
+            sleep(1)
+        self.parent.parent.destroy()
 
        
-
 def main():
     app = App()
     app.mainloop()

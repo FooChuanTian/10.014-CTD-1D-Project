@@ -27,7 +27,7 @@ def str_to_morse(word):
             output_list.append(mapping[str(char)])
             output_list.append(" ")
     
-    return ''.join(output_list)
+    return str(''.join(output_list))
 
 
 def morse_audio(morse_str):
@@ -58,10 +58,12 @@ def morse_audio(morse_str):
 
 
 def test():
-    pass
+    assert str_to_morse("SOS") == "... --- ..."
+    assert str_to_morse("testing 123") == "- . ... - .. -. --./.---- ..--- ...--"
 
 
 def main():
+    test()
     morse_audio(str_to_morse("SOS"))
 
 
