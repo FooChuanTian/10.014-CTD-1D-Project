@@ -3,6 +3,8 @@ from tkinter import messagebox
 import tkinter.ttk as ttk
 import platform
 import string
+import os
+from time import sleep
 
 if platform.system() != "Windows":
     messagebox.showerror("OS Error",\
@@ -27,16 +29,12 @@ class App(tk.Tk):
         self.geometry(self.__width + "x" + self.__height)
         self.resizable(True, True)
 
-        container = tk.Frame(self)
-
-        container.pack(side="top", fill="both", expand = True)
-
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
     
         self.frames = {}
 
-        self.frame = MainWindow(container, self)
+        self.frame = MainWindow(self)
 
         self.frames[MainWindow] = self.frame
 
@@ -45,15 +43,16 @@ class App(tk.Tk):
 
     def show_frame(self, cont):
         """shows a frame in self.frames"""
-        frame = self.frames[cont]
-        frame.tkraise()
+        self.main_window = self.frames[cont]
+        self.main_window.tkraise()
+
 
 
 class MainWindow(tk.Frame):
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-
+        self.parent = parent
         self.__numRow = 2
         self.__numCol  = 3
         self.grid(row=0, column=0)
@@ -322,8 +321,7 @@ class FinalChallenge(tk.Toplevel):
         self.flag = "Look Behind You"
 
         # Creating window elements
-        self.desc = tk.Label(self, text="Congratulations on completing all \
-                            challenges! However, one final puzzle awaits...\
+        self.desc = tk.Label(self, text="Congratulations on completing all challenges! However, one final puzzle awaits...\
                             \nRearrange the flags in the right order")
         self.desc.grid(row=0, column=0, columnspan=3)
 
@@ -378,9 +376,38 @@ class FinalChallenge(tk.Toplevel):
         if " ".join(compare_string_ls) == self.flag:
             ttk.Label(self, text="Good job!").grid(row=message_display_row,\
                     column=0, columnspan=len(self.btn_dict))
+            self.quit_dialog()
         else:
             ttk.Label(self, text="Wrong!").grid(row=message_display_row,\
                     column=0, columnspan=len(self.btn_dict))
+    
+    def quit_dialog(self):
+        """Allows a player to exit the game"""
+        self.quit_top = tk.Toplevel(self.parent)
+        current_user = os.getlogin()
+        tk.Label(self.quit_top, text="LOOK BEHIND YOU").grid(row=0, column=0)
+        self.parent.parent.update()
+        sleep(2)
+        tk.Label(self.quit_top, text="Just kidding :P\nAre you having fun").grid(row=0, column=0)
+        tk.Label(self.quit_top, text="{}".format(current_user), font=("Impact", 30)).grid(row=1, column=0)
+        self.parent.parent.update()
+        sleep(1)
+        #ttl = 5
+        #for i in range(ttl):
+            #tk.Label(self.quit_top, text="Have fun sleeping tonight :)\n This program exits in {} seconds".format(ttl-i)).grid(row=2, column=0)
+            #sleep(1)
+        #self.parent.parent.destroy()
+
+
+        message = "Congratulations on completing the game!\nYou may now quit."
+
+        #self.quit_win = tk.Toplevel(self.parent)
+        #self.quit_button = tk.Button(self.quit_win, text="Quit", command=self.parent.parent.destroy)
+        #self._quit_label = tk.Label(self.quit_win, text=message)
+
+        #self._quit_label.grid(row=0, column=0)
+        #self.quit_button.grid(row=1, column=0)
+
        
 
 def main():
