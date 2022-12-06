@@ -170,7 +170,7 @@ class MorseWin(tk.Toplevel):
     def show_hint(self):
         """opens a window with a morse code reference sheet"""
         self.image_path = "resources/morse_hint.png"
-        self.image_obj = tk.PhotoImage(file="resources/morse_hint.png")
+        self.image_obj = tk.PhotoImage(file=self.image_path)
 
         self.hint_win = tk.Toplevel(self)
         self.hint_win.title("Morse Code Reference")
