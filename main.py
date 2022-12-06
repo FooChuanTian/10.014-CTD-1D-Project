@@ -59,6 +59,9 @@ class MainWindow(tk.Frame):
         self.rowconfigure(0, weight=0)
         self.columnconfigure(0, weight=0)
 
+        self.welcome_txt = tk.Label(self, text="Welcome!\n Click on any of the buttons below to begin your journey",\
+                                    padx=10, pady=10)
+
         # Initialise dict of challenge button properties
         # The dictionary has the following structure:
         # {btn_class:{btn_object, label_object, row, column}}
@@ -96,6 +99,7 @@ class MainWindow(tk.Frame):
                                     self.showWindow(FinalChallenge))
 
         # Place window elements
+        self.welcome_txt.grid(row=0, column=0, columnspan=len(self.btn_dict))
         for entry in self.btn_dict:
             current_entry = self.btn_dict[entry]
             current_entry["button"].grid(row=current_entry["row"],\
@@ -262,14 +266,14 @@ class CipherWin(tk.Toplevel):
         Displays whether the input was correct or not in the window itself
         """
         # Get string input from textbox
-        text_input = self.textbox_cipher.get(1.0, "end-1c")
+        text_input = self.textbox.get(1.0, "end-1c")
 
         # Comparing user-input and correct strings and 
         # displaying whether or not they match
-        message_display_row = self.submit_btn_cipher.grid_info()["row"]+1
-        if text_input == self.flag_cipher:
+        message_display_row = self.submit_btn.grid_info()["row"]+1
+        if text_input == self.flag:
             ttk.Label(self, text="Good job!").grid(row=message_display_row, column=0)
-            self.parent.setStatus(CipherWin, self.flag_cipher)
+            self.parent.setStatus(CipherWin, self.flag)
         else:
             ttk.Label(self, text="Wrong!").grid(row=message_display_row, column=0)
 
