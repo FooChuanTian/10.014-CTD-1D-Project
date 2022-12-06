@@ -196,34 +196,66 @@ class MorseWin(tk.Toplevel):
 class CipherWin(tk.Toplevel):
     """"Creates the GUI window for Challenge 2: Cipher"""
     def __init__(self, parent):
+    
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
-        self.flag_cipher = cipher_challenge.plain_text
+        self.flag = cipher_challenge.plain_text
         self.title("Cipher Challenge")
 
-        # Create window elements
-        self.cipher_desc = ttk.Label(self,\
-                                text="Decode the following cipher code:")
-        #self.play_btn_img = PhotoImage(file="resources/play_button_2.png")
-        self.cipher_button = ttk.Button(self, width=100,\
-                                        text="Click here for cipher code",\
-                                        command=lambda: [self.cipher_button.grid_forget(),self.display_cipher_code()])
-                                     
-        self.submit_btn_cipher = ttk.Button(self, text="Submit",\
-                                    command=lambda: self.compare_input())
-        self.textbox_cipher = tk.Text(self)
+        s = ttk.Style()
+        s.configure('colour.TFrame', background ="red")
+        s.configure('colour_1.TFrame', background ="blue")
 
-        # Place window elements
-        self.cipher_desc.grid(row=0, column=0)
-        self.cipher_button.grid(row=1, column=0)
-        self.textbox_cipher.grid(row=2, column=0)
-        self.submit_btn_cipher.grid(row=3, column=0)
+        #Create Frames
+        self.frame_1 = ttk.Frame(self)
+        self.frame_2 = ttk.Frame(self)
+        self.frame_3 = ttk.Frame(self)
+        self.frame_4 = ttk.Frame(self)
+
+        #Place frames in window
+        self.frame_1.grid(row=0, columnspan=2,padx=10, pady = 10)
+        self.frame_2.grid(row=1, columnspan=2,padx= 10,pady =10)
+        self.frame_3.grid(rowspan=3, column=0)
+        self.frame_4.grid(row=2, column=1)
+
+
+        #Create window elements
+        self.desc = ttk.Label(self.frame_1,\
+                    text="Decode the following Cipher Code:")
+        self.desc.configure(font=('Comic Sans', 20))
+
+        self.display_button = ttk.Button(self.frame_2, width=200,\
+                        text="Click here to display cipher code",\
+                        command=lambda:[self.display_button.grid_forget(),self.display_cipher_code()])
+
+        self.ascii_table_Desc = tk.Label(self.frame_3, text='Cipher Table - Shift the letters to the right by 8 ')
+
+        self.phto_path = 'resources/caesar_cipher.png'
+        self.photo = tk.PhotoImage(file=self.phto_path)
+
+        self.ascii_Table = tk.Label(self.frame_3,image=self.photo)
+        
+
+        self.textbox_Desc = tk.Label(self.frame_4, text='Enter your answer here:')
+        self.textbox = tk.Text(self.frame_4)
+       
+        self.submit_btn = ttk.Button(self.frame_4, text="Submit",\
+                        command=lambda: self.compare_input())
+
+        # Place window elements in frames
+        self.desc.grid(column = 0,columnspan=3, row= 0)
+        self.display_button.grid(column =0, columnspan=3, row = 1)
+        self.ascii_table_Desc.pack(side='top')
+        self.ascii_Table.pack()
+        self.textbox_Desc.grid(row=0)
+        self.textbox.grid(row=1)
+        self.submit_btn.grid(row=2)
 
     def display_cipher_code(self):
         self.label_1 = ttk.Label(self,text=cipher_challenge.caesar(cipher_challenge.plain_text,cipher_challenge.shift,\
                                  cipher_challenge.alpha))
-        self.label_1.configure(anchor='center')
-        self.label_1.grid(row =1,column=0,padx=4,pady=4,sticky="EW")
+        self.label_1.configure(anchor='center',font=('Comic Sans',20))
+        self.label_1.grid(row =1,columnspan=2,padx=10,pady=10,sticky="EW")
 
     def compare_input(self):
         """Compares input in textbox with the correct input
