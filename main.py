@@ -11,7 +11,6 @@ if platform.system() != "Windows":
         "This program requires a Windows Operating System to run!")
     exit(1)
 
-import binary_challenge
 import morse_challenge
 import cipher_challenge
 
