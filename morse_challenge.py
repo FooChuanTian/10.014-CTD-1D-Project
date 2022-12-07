@@ -23,6 +23,8 @@ def str_to_morse(word):
         if char.isspace():
             output_list.pop()
             output_list.append('/')
+        elif char not in mapping:
+            return None
         else:
             output_list.append(mapping[str(char)])
             output_list.append(" ")
@@ -58,8 +60,10 @@ def morse_audio(morse_str):
 
 
 def test():
-    assert str_to_morse("SOS") == "... --- ..."
-    assert str_to_morse("testing 123") == "- . ... - .. -. --./.---- ..--- ...--"
+    assert str_to_morse("SOS") == "... --- ... "
+    assert str_to_morse("testing 123") == "- . ... - .. -. --./.---- ..--- ...-- "
+    assert str_to_morse("SOS?!") == "... --- ... ..--.. -.-.-- "
+    assert str_to_morse("パイソンは好きです") == None
 
 
 def main():
